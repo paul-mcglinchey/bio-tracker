@@ -5,14 +5,15 @@ import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import NavLink from './components/NavLink.vue'
 import Modal from './components/Modal.vue'
-import { ref } from 'vue'
-import { APISettings } from './api/config'
-import PocketBase from 'pocketbase'
+import Menu from './components/Menu.vue'
+import { inject, ref, watch } from 'vue'
+import { authInjectionKey } from './injectionKeys/auth.key'
 
-const pb = new PocketBase(APISettings.baseURL)
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }
 const closeLogin = (): void => { loginOpen.value = false }
+
+const auth = inject(authInjectionKey, ref(null))
 
 </script>
 
@@ -26,10 +27,10 @@ const closeLogin = (): void => { loginOpen.value = false }
             <NavLink to="/">Dashboard</NavLink>
             <NavLink to="about">About</NavLink>
           </nav>
-          <button v-if="!pb.authStore.isValid" type="button" @click="openLogin" class="text-lg lowercase text-neutral-500 font-bold px-2 py-1 h-fit border-b-2 border-transparent hover:border-neutral-500 transition-colors">
+          <button v-if="!auth?.isValid" type="button" @click="openLogin" class="text-lg lowercase text-neutral-500 font-bold px-2 py-1 h-fit border-b-2 border-transparent hover:border-neutral-500 transition-colors">
             Login
           </button>
-          <span v-else>Hello, {{ pb.authStore.model!['name'] ?? pb.authStore.model!['username'] }}</span>
+          <Menu :label="'Hello, ' + auth?.model!.name ?? auth?.model!.username" v-else />
         </div>
       </div>
     </header>

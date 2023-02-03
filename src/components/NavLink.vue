@@ -9,8 +9,6 @@ const matched = ref(route.matched)
 
 watch(route, () => {
   matched.value = route.matched
-
-  console.log(matched.value.some(({ name }) => name === "about"));
 })
 
 </script>

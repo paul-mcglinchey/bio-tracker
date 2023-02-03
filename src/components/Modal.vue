@@ -45,7 +45,6 @@ const onSubmit = async () => {
       )
   
       if (pb.authStore.isValid) {
-        console.log('Success!')
         success.value = true
 
         setTimeout(() => emit('close'), 300)
@@ -66,7 +65,6 @@ const onSubmit = async () => {
     error.value = (e as ClientResponseError).message
   } finally {
     loading.value = false
-    console.log(pb.authStore.token)
   }
 }
 
