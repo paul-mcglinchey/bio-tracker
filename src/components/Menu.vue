@@ -4,13 +4,13 @@ import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
 import { dbInjectionKey } from '@/injectionKeys/db.key';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 
 defineProps<{
   label?: string
 }>()
 
-const db = inject(dbInjectionKey)
+const authService = inject(authServiceInjectionKey)
 
 </script>
 
@@ -28,7 +28,7 @@ const db = inject(dbInjectionKey)
               active ? 'bg-indigo-500 text-white' : 'text-gray-900',
               'group flex w-full items-center rounded-md px-2 py-2 text-sm',
             ]" 
-            @click="db?.authStore.clear()"
+            @click="authService?.logout()"
           >
             Logout
           </button>

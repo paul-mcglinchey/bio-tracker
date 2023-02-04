@@ -6,13 +6,8 @@ import Footer from './components/Footer.vue'
 import NavLink from './components/NavLink.vue'
 import Modal from './components/Modal.vue'
 import Menu from './components/Menu.vue'
-import { inject, ref, watch } from 'vue'
-import { APISettings } from './api/config'
-import PocketBase from 'pocketbase'
-import type { BaseAuthStore } from 'pocketbase'
-import { computed, type Ref } from '@vue/reactivity'
+import { inject, ref } from 'vue'
 import { dbInjectionKey } from './injectionKeys/db.key'
-import { authServiceInjectionKey } from './injectionKeys/auth.service.key'
 
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }

@@ -1,7 +1,4 @@
-import { dbInjectionKey } from '@/injectionKeys/db.key';
-import type { BaseAuthStore, LocalAuthStore } from 'pocketbase';
 import type PocketBase from 'pocketbase';
-import type { Ref } from 'vue';
 
 export interface ISignupFormValues {
   username: string,

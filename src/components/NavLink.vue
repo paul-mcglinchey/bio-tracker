@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { RouterLink, useLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 
 defineProps<{ to: string }>()
 
