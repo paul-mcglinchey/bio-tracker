@@ -10,7 +10,7 @@ import Nav from './components/Nav.vue'
 
 <template>
   <div class="px-2 md:px-5 mt-2">
-    <header>
+    <header class="mb-4">
       <div class="flex justify-between items-center">
         <Header msg="Bio-tracker" />
         <Nav />
