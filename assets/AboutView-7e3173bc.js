@@ -1,0 +1,1 @@
+import{_ as e,o,c as s,a as t}from"./index-6ee6b316.js";const n={},c={class:"bg-indigo-700 rounded-lg pt-40 mt-10 p-5 ring-4 ring-offset-4 ring-indigo-700 shadow-md mb-6"},a=t("div",{class:"text-9xl font-bold tracking-wide"},[t("h1",{class:"font-sans text-white"}," about ")],-1),i=[a];function d(r,_){return o(),s("div",c,i)}const l=e(n,[["render",d]]);export{l as default};

@@ -1,1 +1,0 @@
-import{_ as t,o as e,c as o,a as s}from"./index-7145f275.js";const n={},a={class:"bg-indigo-700 rounded-lg pt-40 mt-10 p-5 ring-4 ring-offset-4 ring-indigo-700 shadow-md"},c=s("div",{class:"text-9xl font-bold tracking-wide"},[s("h1",{class:"font-sans text-white"}," dashboard ")],-1),d=[c];function i(r,_){return e(),o("div",a,d)}const l=t(n,[["render",i]]);export{l as default};
