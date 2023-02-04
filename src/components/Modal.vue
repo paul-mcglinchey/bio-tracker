@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import TextInput from './TextInput.vue'
-import { ArrowPathIcon, CheckIcon } from '@heroicons/vue/20/solid'
+import { ArrowPathIcon, CheckIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
 import type { ClientResponseError } from 'pocketbase';
 
@@ -47,7 +47,6 @@ const onSubmit = async () => {
       )
   
       success.value = true
-      form.value = initialFormValues
       setTimeout(() => emit('close'), 300)
     } else {
       await authService?.signup({
@@ -64,6 +63,15 @@ const onSubmit = async () => {
   } catch(e) {
     error.value = (e as ClientResponseError).message
   } finally {
+    if (success.value) {
+      form.value.email = ''
+      form.value.name = ''
+      form.value.password = ''
+      form.value.passwordConfirm = ''
+      form.value.username = ''
+      form.value.usernameOrEmail = ''
+    }
+
     loading.value = false
   }
 }
@@ -87,28 +95,33 @@ const onSubmit = async () => {
 
       <div class="fixed inset-0 overflow-y-auto">
         <div
-          class="flex justify-center p-4 pt-40 text-center"
+          class="flex justify-center pt-20 md:pt-40 text-center h-screen sm:h-auto"
         >
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
-            enter-from="opacity-0 scale-95"
-            enter-to="opacity-100 scale-100"
+            enter-from="opacity-0 translate-y-full"
+            enter-to="opacity-100 scale-100 translate-y-0"
             leave="duration-200 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-95"
+            leave-from="opacity-100 scale-100 translate-y-0"
+            leave-to="opacity-0 scale-95 translate-y-full"
           >
             <DialogPanel
-              class="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-xl transform overflow-hidden rounded-t-2xl md:rounded-b-2xl bg-white p-2 pt-4 md:p-6 text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle
                 as="h3"
-                class="text-lg font-medium leading-6 text-gray-900"
+                class="flex justify-between items-center text-lg font-medium leading-6 text-gray-900"
               >
-                {{ loggingIn ? 'Login' : 'Sign Up' }}
+                <div>
+                  {{ loggingIn ? 'Login' : 'Sign Up' }}
+                </div>
+                <button type="button" @click="emit('close')">
+                  <XMarkIcon class="h-8 w-8"/>
+                </button>
               </DialogTitle>
               <div class="mt-2">
-                <form class="flex flex-col" @submit.prevent="onSubmit">
+                <form class="flex flex-col" name="loginSignupForm" @submit.prevent="onSubmit">
                   <TextInput
                     v-if="!loggingIn"
                     v-model="form.name"
