@@ -14,10 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write
-      repository-projects: write
+    permissions: write-all
 
     steps:
     - uses: actions/checkout@v3
