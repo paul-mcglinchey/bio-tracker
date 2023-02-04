@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import {
   TransitionRoot,
   TransitionChild,
@@ -8,11 +8,11 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import TextInput from './TextInput.vue'
-import { APISettings } from '@/api/config';
-import PocketBase, { ClientResponseError } from 'pocketbase';
 import { ArrowPathIcon, CheckIcon } from '@heroicons/vue/20/solid'
+import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
+import type { ClientResponseError } from 'pocketbase';
 
-const pb = new PocketBase(APISettings.baseURL)
+const authService = inject(authServiceInjectionKey)
 const loggingIn = ref<boolean>(true)
 const toggleLoggingIn = () => { loggingIn.value = !loggingIn.value }
 const loading = ref<boolean>(false)
@@ -24,33 +24,33 @@ defineProps<{
 }>()
 const emit = defineEmits(['close'])
 
-const form = ref({
+const initialFormValues = {
   name: '',
   usernameOrEmail: '',
   username: '',
   email: '',
   password: '',
   passwordConfirm: ''
-})
+}
+
+const form = ref(initialFormValues)
 
 const onSubmit = async () => {
-
+  error.value = null
   loading.value = true
 
   try {
     if (loggingIn.value) {
-      await pb.collection('users').authWithPassword(
+      await authService?.login(
         form.value.usernameOrEmail,
         form.value.password
       )
   
-      if (pb.authStore.isValid) {
-        success.value = true
-
-        setTimeout(() => emit('close'), 300)
-      }
+      success.value = true
+      form.value = initialFormValues
+      setTimeout(() => emit('close'), 300)
     } else {
-      await pb.collection('users').create({
+      await authService?.signup({
         "username": form.value.username,
         "email": form.value.email,
         "emailVisibility": true,
@@ -59,7 +59,7 @@ const onSubmit = async () => {
         "name": form.value.name
       })
   
-      await pb.collection('users').requestVerification(form.value.email)
+      await authService?.requestVerification(form.value.email)
     }
   } catch(e) {
     error.value = (e as ClientResponseError).message

@@ -7,13 +7,23 @@ import NavLink from './components/NavLink.vue'
 import Modal from './components/Modal.vue'
 import Menu from './components/Menu.vue'
 import { inject, ref, watch } from 'vue'
-import { authInjectionKey } from './injectionKeys/auth.key'
+import { APISettings } from './api/config'
+import PocketBase from 'pocketbase'
+import type { BaseAuthStore } from 'pocketbase'
+import { computed, type Ref } from '@vue/reactivity'
+import { dbInjectionKey } from './injectionKeys/db.key'
+import { authServiceInjectionKey } from './injectionKeys/auth.service.key'
 
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }
 const closeLogin = (): void => { loginOpen.value = false }
 
-const auth = inject(authInjectionKey, ref(null))
+const db = ref(inject(dbInjectionKey))
+const isValid = ref(db.value?.authStore.isValid)
+
+db?.value?.authStore.onChange(() => {
+  isValid.value = db.value?.authStore.isValid
+})
 
 </script>
 
@@ -27,10 +37,10 @@ const auth = inject(authInjectionKey, ref(null))
             <NavLink to="/">Dashboard</NavLink>
             <NavLink to="about">About</NavLink>
           </nav>
-          <button v-if="!auth?.isValid" type="button" @click="openLogin" class="text-lg lowercase text-neutral-500 font-bold px-2 py-1 h-fit border-b-2 border-transparent hover:border-neutral-500 transition-colors">
+          <Menu v-if="isValid" :label="'Hello, ' + db?.authStore.model?.name ?? db?.authStore?.model?.username" />
+          <button v-else type="button" @click="openLogin" class="text-lg lowercase text-neutral-500 font-bold px-2 py-1 h-fit border-b-2 border-transparent hover:border-neutral-500 transition-colors">
             Login
           </button>
-          <Menu :label="'Hello, ' + auth?.model!.name ?? auth?.model!.username" v-else />
         </div>
       </div>
     </header>

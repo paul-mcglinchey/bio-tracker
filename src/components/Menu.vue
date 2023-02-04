@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { authInjectionKey } from '@/injectionKeys/auth.key';
+import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
+import { dbInjectionKey } from '@/injectionKeys/db.key';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 
 defineProps<{
   label?: string
 }>()
 
-const auth = inject(authInjectionKey)
-
-const handleLogout = () => {
-  console.log(auth?.value?.isValid)
-  auth?.value?.clear()
-  console.log(auth?.value?.isValid)
-}
+const db = inject(dbInjectionKey)
 
 </script>
 
@@ -32,7 +28,7 @@ const handleLogout = () => {
               active ? 'bg-indigo-500 text-white' : 'text-gray-900',
               'group flex w-full items-center rounded-md px-2 py-2 text-sm',
             ]" 
-            @click="handleLogout"
+            @click="db?.authStore.clear()"
           >
             Logout
           </button>

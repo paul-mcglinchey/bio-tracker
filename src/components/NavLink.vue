@@ -26,8 +26,8 @@ watch(route, () => {
         isActive && 'before:scale-x-100'
       ]">
       <span :class="[
-        'relative text-indigo-500 group-hover:text-white transition-colors ease-in-out',
-        isActive && 'text-white'
+        'relative group-hover:text-white transition-colors ease-in-out',
+        isActive ? 'text-white' : 'text-indigo-500'
       ]">
         <slot />
       </span>
