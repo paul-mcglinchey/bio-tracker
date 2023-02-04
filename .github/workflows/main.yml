@@ -32,4 +32,4 @@ jobs:
         npm version patch
         VERSION=$(node -p "require('./package.json').version")
         git tag ${VERSION}
-        git push "https://paul-mcglinchey:${{ secrets.GITHUB_TOKEN }}@github.com/bio-tracker.git" --follow-tags
+        git push "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/bio-tracker.git" --follow-tags
