@@ -11,7 +11,7 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div class="mt-6 relative w-full">
+  <div class="mt-4 sm:mt-6 relative w-full">
     <input
       v-bind="$attrs"
       :name="name"

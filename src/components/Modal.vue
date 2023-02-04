@@ -120,8 +120,8 @@ const onSubmit = async () => {
                   <XMarkIcon class="h-8 w-8"/>
                 </button>
               </DialogTitle>
-              <div class="mt-2">
-                <form class="flex flex-col" name="loginSignupForm" @submit.prevent="onSubmit">
+              <div class="mt-0 sm:mt-2">
+                <form class="flex flex-col" name="loginSignupForm" @submit.prevent="onSubmit" autocomplete="off">
                   <TextInput
                     v-if="!loggingIn"
                     v-model="form.name"
@@ -130,6 +130,7 @@ const onSubmit = async () => {
                   <TextInput
                     v-if="loggingIn"
                     v-model="form.usernameOrEmail"
+                    aria-autocomplete="none"
                     name="usernameOrEmail"
                     label="Username or Email" />
                   <TextInput
