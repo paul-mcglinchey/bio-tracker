@@ -18,7 +18,7 @@ const generateInstance = () => ref({
   ...generateInstancePosition(),
   strength: Math.random() * 0.5,
   id: uuidv4(),
-  lifespan: Math.floor(Math.random() * 100) 
+  lifespan: Math.floor(Math.random() * 10) 
 })
 
 const cycleInstances = () => {
@@ -47,7 +47,7 @@ onMounted(() => {
     activeInstances.value.push(generateInstance())
   }
 
-  setInterval(() => cycleInstances(), 100)
+  setInterval(() => cycleInstances(), 1000)
 })
 
 </script>

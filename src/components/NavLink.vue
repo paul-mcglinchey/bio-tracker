@@ -18,7 +18,7 @@ watch(route, () => {
     :to="to"
     v-slot="{ isActive }"
     active-class=""
-    :class="['font-bold text-lg group lowercase font-mono']">
+    :class="['font-bold text-lg group lowercase']">
     <span
       :class="[
         'relative inline-block px-2',
