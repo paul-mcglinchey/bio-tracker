@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 
-var activeInstances = ref<{ x: number, y: number, strength: number, id: string }[]>([])
+var activeInstances = ref<Ref<{ x: number, y: number, strength: number, id: string, lifespan: number }>[]>([])
 
 const generateInstancePosition = () => {
   const yMax = Math.floor(window.innerHeight) + 25
@@ -11,29 +11,43 @@ const generateInstancePosition = () => {
   let activeY = Math.floor(Math.random() * yMax)
   let activeX = Math.floor(Math.random() * xMax)
   
-  return { x: activeX, y: activeY, strength: Math.random() * 0.5, id: uuidv4() }
+  return { x: activeX, y: activeY }
 }
 
-const cycleInstances = async () => {
-  var chanceToRemoveInstance = Math.random()
+const generateInstance = () => ref({ 
+  ...generateInstancePosition(),
+  strength: Math.random() * 0.5,
+  id: uuidv4(),
+  lifespan: Math.floor(Math.random() * 100) 
+})
 
-  // 30 % chance of removing an instance if less than 100 instances, otherwise 60%
-  if (activeInstances.value.length > 100 ? chanceToRemoveInstance > 0.4 : chanceToRemoveInstance > 0.7) {
-    activeInstances.value.splice(Math.floor(Math.random() * activeInstances.value.length), 1)
+const cycleInstances = () => {
+
+  for (let i = 0; i < activeInstances.value.length; i++) {
+    activeInstances.value[i].value.lifespan--
+
+    // remove dead instances
+    if (activeInstances.value[i].value.lifespan <= 0) {
+      activeInstances.value.splice(i, 1)
+    }
   }
 
-  activeInstances.value.push(generateInstancePosition())
-  
-  setTimeout(() => cycleInstances(), 200)
+  // create new instances
+  let numberOfInstancesToAdd = Math.floor(Math.random() * 5) + 1
+
+  for (let i = 0; i < numberOfInstancesToAdd; i++) {
+    activeInstances.value.push(generateInstance())
+  }
 }
 
 onMounted(() => {
 
+  // create 100 instances to populate the page
   for (let i = 0; i < 100; i++) {
-    activeInstances.value.push(generateInstancePosition())
+    activeInstances.value.push(generateInstance())
   }
 
-  cycleInstances()
+  setInterval(() => cycleInstances(), 100)
 })
 
 </script>
@@ -43,14 +57,14 @@ onMounted(() => {
     <TransitionGroup name="skybox">
       <div 
         v-for="instance in activeInstances"
-        :key="instance.id"
+        :key="instance.value.id"
         class="absolute rounded-full bg-indigo-500"
         :style="{
-          top: instance.y + 'px',
-          left: instance.x + 'px',
-          opacity: instance.strength,
-          width: instance.strength * 2 + 'rem',
-          height: instance.strength * 2 + 'rem' 
+          top: instance.value.y + 'px',
+          left: instance.value.x + 'px',
+          opacity: instance.value.strength,
+          width: instance.value.strength * 2 + 'rem',
+          height: instance.value.strength * 2 + 'rem' 
         }">
       </div>
     </TransitionGroup>
