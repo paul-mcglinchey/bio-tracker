@@ -16,7 +16,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: bahmutov/npm-install@v1
     - run: npm i
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v3
