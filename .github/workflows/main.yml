@@ -33,3 +33,6 @@ jobs:
         VERSION=$(node -p "require('./package.json').version")
         git tag ${VERSION}
         git push --follow-tags
+
+    - name: Deploy to GitHub Pages
+      run: npm run deploy
