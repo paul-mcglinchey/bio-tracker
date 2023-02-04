@@ -5,6 +5,7 @@ import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import NavLink from './components/NavLink.vue'
 import Modal from './components/Modal.vue'
+import Splash from './components/Splash.vue'
 import Menu from './components/Menu.vue'
 import { inject, ref } from 'vue'
 import { dbInjectionKey } from './injectionKeys/db.key'
@@ -48,4 +49,5 @@ db?.value?.authStore.onChange(() => {
   </div>
   
   <Modal :is-open="loginOpen" @close="closeLogin" />
+  <Splash />
 </template>
