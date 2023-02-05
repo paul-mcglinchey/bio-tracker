@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AccordionSection from '@/components/AccordionSection.vue';
-import NumberInput from '../components/NumberInput.vue'
+import NumericInput from '../components/NumericInput.vue'
+import DateInput from '../components/DateInput.vue'
 import { ArrowPathIcon, CheckIcon, ChevronUpIcon, QuestionMarkCircleIcon } from '@heroicons/vue/20/solid';
 import { inject, ref } from 'vue';
 import { dbInjectionKey } from '@/injectionKeys/db.key';
@@ -24,6 +25,7 @@ const error = ref<string | null>(null)
 const success = ref(false)
 
 const form = ref({
+  'readingDateTime': new Date().toISOString().split("T")[0],
   'bodyMassKg': null,
   'bmi': null,
   'bodyFatPercentage': null,
@@ -75,7 +77,7 @@ const handleSubmit = async () => {
               Do I need to log in?
             </span>
             <QuestionMarkCircleIcon class="w-5 h-5" />
-            <div class="hidden hover:flex group-hover:flex absolute bg-indigo-500/20 top-full w-72 right-0 origin-top-right text-left text-sm p-2 flex-col space-y-2">
+            <div class="hidden hover:flex group-hover:flex absolute z-50 bg-indigo-500/20 top-full w-72 right-0 origin-top-right text-left text-sm p-2 flex-col space-y-2">
               <p>
                 No, absolutely not!
               </p>
@@ -92,32 +94,37 @@ const handleSubmit = async () => {
     <AccordionSection section-title="Add a new entry">
       <form @submit.prevent="handleSubmit">
         <div class="mb-4">
-          <NumberInput
+          <DateInput 
+            v-model="form.readingDateTime"
+            name="readingDateTime"
+            label="Reading Date"
+          />
+          <NumericInput
             v-model.number="form.bodyMassKg"
             name="bodyMassKg"
             label="Body Mass (Kg)"
           />
-          <NumberInput
+          <NumericInput
             v-model.number="form.bmi"
             name="bmi"
             label="BMI"
           />
-          <NumberInput
+          <NumericInput
             v-model.number="form.bodyFatPercentage"
             name="bodyFatPercentage"
             label="Body Fat (%)"
           />
-          <NumberInput
+          <NumericInput
             v-model.number="form.bodyMusclePercentage"
             name="bodyMusclePercentage"
             label="Body Muscle (%)"
           />
-          <NumberInput
+          <NumericInput
             v-model.number="form.bodyWaterPercentage"
             name="bodyWaterPercentage"
             label="Body Water Percentage (%)"
           />
-          <NumberInput
+          <NumericInput
             v-model.number="form.boneMassKg"
             name="boneMassKg"
             label="Bone Mass (Kg)"
@@ -132,6 +139,11 @@ const handleSubmit = async () => {
         </div>
       </form>
     </AccordionSection>
+    <table>
+      <tr>
+        <th></th>
+      </tr>
+    </table>
   </div>
 </template>
 
