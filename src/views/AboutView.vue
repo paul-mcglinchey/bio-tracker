@@ -34,7 +34,7 @@ import Blob from '@/components/Blob.vue';
             class="italic text-indigo-700" href="mailto:paulmcglinchey789@gmail.com">email</a>!
         </p>
       </div>
-      <Blob class="hidden xl:block"/>
+      <Blob class="hidden xl:flex"/>
     </div>
   </div>
 </template>

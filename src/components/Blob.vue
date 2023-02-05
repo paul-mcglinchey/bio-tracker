@@ -7,7 +7,7 @@ const path = ref("M42.7,-49.5C57.2,-38.7,72.1,-27,77,-11.7C82,3.7,77,22.6,68,40.
 </script>
 
 <template>
-  <div class="w-1/2 flex flex-col">
+  <div class="flex-1 max-w-3xl flex flex-col justify-center">
     <svg class="fill-indigo-500 transition-all" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
       <path :d="path" class="transition-all stroke-indigo-200" transform="translate(100 100)" />
     </svg>
