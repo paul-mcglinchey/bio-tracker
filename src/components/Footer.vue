@@ -5,7 +5,7 @@ var version = APP_VERSION
 <template>
   <a
     href="https://github.com/paul-mcglinchey/bio-tracker" 
-    class="fixed left-0 bottom-0 text-center w-screen text-sm font-bold lowercase pb-2 group"
+    class="bg-neutral-100 lg:bg-transparent fixed left-0 bottom-0 text-center w-screen text-sm font-bold lowercase lg:pb-2 group"
   >
     <span class="border-r-2 mr-2 pr-2">v{{ version }}</span>
     <span class="inline-block group-hover:-translate-x-full group-hover:scale-x-0 transition-transform origin-right">
