@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --animation-time: 2s;
+  --blob-scale: 1.05; 
+}
