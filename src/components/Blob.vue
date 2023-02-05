@@ -28,9 +28,6 @@ onMounted(() => {
 
 <style scoped>
 
-@keyframes pulse {
-}
-
 path {
   transform: scale(var(--blob-scale)) translate(50%, 50%);
   transition: transform 2s ease-in-out;
