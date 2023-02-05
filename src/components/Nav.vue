@@ -4,10 +4,11 @@ import { computed, inject, ref } from 'vue';
 import NavLink from '../components/NavLink.vue'
 import Menu from '../components/Menu.vue'
 import Modal from '../components/Modal.vue'
+import MobileNavLink from './MobileNavLink.vue';
 import { XMarkIcon, Bars3Icon } from '@heroicons/vue/20/solid';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import MobileNavLink from './MobileNavLink.vue';
 import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
+import { useRouter } from 'vue-router';
 
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }
@@ -22,6 +23,10 @@ db?.value?.authStore.onChange(() => {
 })
 
 const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
+
+const navigate = (close: any) => {
+  close()
+}
 
 </script>
 
@@ -45,7 +50,10 @@ const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
         <Bars3Icon class="w-7 h-7 text-indigo-500" />
       </DisclosureButton>
 
-      <DisclosurePanel class="lg:hidden h-screen w-screen inset-0 text-neutral-800 bg-white fixed z-50 mx-auto px-2 sm:px-6 overflow-y-hidden">
+      <DisclosurePanel
+        v-slot="{ close }"
+        class="lg:hidden h-screen w-screen inset-0 text-neutral-800 bg-white fixed z-50 mx-auto px-2 sm:px-6 overflow-y-hidden"
+      >
         <div :class="['flex items-center h-16', isValid ? 'justify-between' : 'justify-end']">
           <div v-if="isValid" class="">{{ greeting }}</div>
           <DisclosureButton class="">
@@ -53,8 +61,8 @@ const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
           </DisclosureButton>
         </div>
         <div class="flex flex-col space-y-2">
-          <DisclosureButton :as="MobileNavLink" to="/">Dashboard</DisclosureButton>
-          <DisclosureButton :as="MobileNavLink" to="/about">About</DisclosureButton>
+          <MobileNavLink @click="close()" to="/">Dashboard</MobileNavLink>
+          <MobileNavLink @click="close()" to="/about">About</MobileNavLink>
         </div>
       <div class="flex text-center mt-4 border-t border-neutral-500/50 pt-4 justify-center text-lg">
         <DisclosureButton v-if="isValid" as="button" @click="authService?.logout()" class="lowercase">Logout</DisclosureButton>
