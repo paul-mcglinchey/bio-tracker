@@ -1,7 +1,7 @@
 {
   "name": "bio-tracker",
   "homepage": "https://www.bio-tracker.co.uk",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "private": true,
   "scripts": {
     "dev": "vite",
