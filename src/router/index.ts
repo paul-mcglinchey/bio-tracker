@@ -4,7 +4,7 @@ const router = createRouter({
   history: createWebHistory('/bio-tracker/'),
   routes: [
     {
-      path: '/',
+      path: '/bio-tracker/',
       name: 'dashboard',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -12,7 +12,7 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue')
     },
     {
-      path: '/about',
+      path: '/bio-tracker/about',
       name: 'about',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
