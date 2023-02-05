@@ -6,6 +6,8 @@ defineProps<{
 
 <template>
   <div>
-    <h1 class="text-xl md:text-4xl tracking-wider lowercase">{{ msg }}</h1>
+    <RouterLink to="/">
+      <h1 class="text-xl md:text-4xl tracking-wider lowercase select-none">{{ msg }}</h1>
+    </RouterLink>
   </div>
 </template>

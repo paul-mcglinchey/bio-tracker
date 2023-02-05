@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex-1 max-w-3xl flex flex-col justify-center">
+  <div class="w-full max-w-3xl flex flex-col justify-center">
     <svg class="fill-indigo-500 transition-all" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
       <path id="svgPath" :d="path" class="transition-all stroke-indigo-200 origin-center" />
     </svg>

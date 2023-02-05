@@ -8,7 +8,7 @@ import Blob from '@/components/Blob.vue';
     <h1 class="font-sans text-indigo-500 border-b-2 pb-2 text-5xl md:text-6xl font-bold tracking-wide">
       about
     </h1>
-    <div class="flex">
+    <div class="flex justify-between">
       <div class="mt-2 max-w-4xl lg:text-justify flex flex-col space-y-4 font-medium text-neutral-800">
         <p>
           The <span class="text-indigo-500">bio-tracker</span> application was developed off the back of a new year's
@@ -34,7 +34,9 @@ import Blob from '@/components/Blob.vue';
             class="italic text-indigo-700" href="mailto:paulmcglinchey789@gmail.com">email</a>!
         </p>
       </div>
-      <Blob />
+      <div class="hidden lg:flex flex-1">
+        <Blob />
+      </div>
     </div>
   </div>
 </template>
