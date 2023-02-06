@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import Blob from '@/components/Blob.vue';
-import { TabGroup, TabList, TabPanels, TabPanel, Tab, Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import TabButton from '@/components/TabButton.vue';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/20/solid';
 import AccordionSection from '@/components/AccordionSection.vue';
 
 

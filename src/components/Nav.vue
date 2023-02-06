@@ -3,12 +3,11 @@ import { dbInjectionKey } from '@/injectionKeys/db.key';
 import { computed, inject, ref } from 'vue';
 import NavLink from '../components/NavLink.vue'
 import Menu from '../components/Menu.vue'
-import Modal from '../components/Modal.vue'
+import LoginModal from './LoginModal.vue'
 import MobileNavLink from './MobileNavLink.vue';
 import { XMarkIcon, Bars3Icon } from '@heroicons/vue/20/solid';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
-import { useRouter } from 'vue-router';
 
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }
@@ -23,10 +22,6 @@ db?.value?.authStore.onChange(() => {
 })
 
 const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
-
-const navigate = (close: any) => {
-  close()
-}
 
 </script>
 
@@ -70,6 +65,6 @@ const navigate = (close: any) => {
       </div>
       </DisclosurePanel>
     </Disclosure>
-    <Modal :is-open="loginOpen" @close="closeLogin" />
+    <LoginModal :is-open="loginOpen" @close="closeLogin" />
   </div>
 </template>
