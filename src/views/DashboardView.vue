@@ -6,12 +6,12 @@ import TableHeader from '@/components/TableHeader.vue';
 import TableRow from '@/components/TableRow.vue';
 import TableCell from '@/components/TableCell.vue';
 import { ArrowPathIcon, CheckIcon, ChevronUpIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/vue/20/solid';
-import { computed, inject, onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { dbInjectionKey } from '@/injectionKeys/db.key';
-import { ClientResponseError } from 'pocketbase';
 import { subDays } from 'date-fns'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { v4 as uuid } from 'uuid'
+import type { ClientResponseError } from 'pocketbase';
 
 interface IBiometric {
   id?: string
