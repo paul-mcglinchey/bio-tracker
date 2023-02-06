@@ -15,8 +15,8 @@ import AccordionSection from '@/components/AccordionSection.vue';
       about
     </h1>
     <div class="flex">
-      <div class="w-full max-w-4xl">
-        <AccordionSection section-title="Background">
+      <div class="w-full max-w-4xl flex flex-col space-y-2">
+        <AccordionSection section-title="Background" :default-open="true">
           <div class="flex justify-between">
             <div class="mt-2 max-w-4xl lg:text-justify flex flex-col space-y-4 font-medium text-neutral-800">
               <p>
