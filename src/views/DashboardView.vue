@@ -10,6 +10,7 @@ import { computed, inject, onMounted, ref } from 'vue';
 import { dbInjectionKey } from '@/injectionKeys/db.key';
 import type { ClientResponseError } from 'pocketbase';
 import { subDays } from 'date-fns'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
 interface IBiometric {
   id: string
@@ -58,7 +59,7 @@ const getEntries = async () => {
   loading.value = true
 
   try {
-    const res = await db?.collection('biometrics').getList<IBiometric>(1, 200, { filter: 'user.id=\'' + db.authStore.model?.id + '\'' })
+    const res = await db?.collection('biometrics').getList<IBiometric>(1, 200, { filter: 'user.id=\'' + db.authStore.model?.id + '\'', sort: '-readingDateTime' })
     biometrics.value = res?.items ?? []
   } catch (e) {
     let apiError = e as ClientResponseError
@@ -107,7 +108,7 @@ const deleteEntry = async (id: string) => {
     console.error(apiError.message)
   } finally {
     await getEntries()
-    loading.value = true
+    loading.value = false
   }
 }
 
@@ -214,32 +215,43 @@ const shouldShowDate = (readingDateTime: string): boolean => {
     <div class="flex flex-col lg:hidden space-y-2">
       <div v-for="item in biometrics">
         <AccordionSection :section-title="item.readingDateTime.split(' ')[0]" :default-open="shouldShowDate(item.readingDateTime)">
-          <table class="w-full">
-            <TableRow>
-              <td>Body Mass (Kg)</td>
-              <td>{{ item.bodyMassKg }}</td>
-            </TableRow>
-            <TableRow>
-              <td>BMI</td>
-              <td>{{ item.bmi }}</td>
-            </TableRow>
-            <TableRow>
-              <td>Body Fat (%)</td>
-              <td>{{ item.bodyFatPercentage }}</td>
-            </TableRow>
-            <TableRow>
-              <td>Body Muscle (%)</td>
-              <td>{{ item.bodyMusclePercentage }}</td>
-            </TableRow>
-            <TableRow>
-              <td>Body Water (%)</td>
-              <td>{{ item.bodyWaterPercentage }}</td>
-            </TableRow>
-            <TableRow>
-              <td>Bone Mass (Kg)</td>
-              <td>{{ item.boneMassKg }}</td>
-            </TableRow>
-          </table>
+          <Disclosure>
+            <DisclosureButton as="div">
+              <table class="w-full">
+                <TableRow>
+                  <td>Body Mass (Kg)</td>
+                  <td>{{ item.bodyMassKg }}</td>
+                </TableRow>
+                <TableRow>
+                  <td>BMI</td>
+                  <td>{{ item.bmi }}</td>
+                </TableRow>
+                <TableRow>
+                  <td>Body Fat (%)</td>
+                  <td>{{ item.bodyFatPercentage }}</td>
+                </TableRow>
+                <TableRow>
+                  <td>Body Muscle (%)</td>
+                  <td>{{ item.bodyMusclePercentage }}</td>
+                </TableRow>
+                <TableRow>
+                  <td>Body Water (%)</td>
+                  <td>{{ item.bodyWaterPercentage }}</td>
+                </TableRow>
+                <TableRow>
+                  <td>Bone Mass (Kg)</td>
+                  <td>{{ item.boneMassKg }}</td>
+                </TableRow>
+              </table>
+              <Transition>
+                <DisclosurePanel>
+                  <div class="flex justify-end py-1">
+                    <button type="button" @click="deleteEntry(item.id)" class="text-rose-500 px-2 py-1 border-b border-rose-500">delete</button>
+                  </div>
+                </DisclosurePanel>
+              </Transition>
+            </DisclosureButton>
+          </Disclosure>
         </AccordionSection>
       </div>
     </div>
