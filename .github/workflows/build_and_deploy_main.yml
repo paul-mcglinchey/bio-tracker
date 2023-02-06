@@ -45,4 +45,4 @@ jobs:
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
-run-name: ${{ env.build_version_number }}
+run-name: $build_version_number
