@@ -8,19 +8,20 @@ import TableCell from '@/components/TableCell.vue';
 import { ArrowPathIcon, CheckIcon, ChevronUpIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/vue/20/solid';
 import { computed, inject, onMounted, ref } from 'vue';
 import { dbInjectionKey } from '@/injectionKeys/db.key';
-import type { ClientResponseError } from 'pocketbase';
+import { ClientResponseError } from 'pocketbase';
 import { subDays } from 'date-fns'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { v4 as uuid } from 'uuid'
 
 interface IBiometric {
-  id: string
+  id?: string
   readingDateTime: string
-  bodyMassKg: number
-  bmi: number
-  bodyFatPercentage: number
-  bodyMusclePercentage: number
-  bodyWaterPercentage: number
-  boneMassKg: number
+  bodyMassKg: number | null
+  bmi: number | null
+  bodyFatPercentage: number | null
+  bodyMusclePercentage: number | null
+  bodyWaterPercentage: number | null
+  boneMassKg: number | null
 }
 
 const welcomeOpen = ref<boolean>(localStorage.getItem('welcome-open') === "true" ? true : false)
@@ -41,7 +42,7 @@ const error = ref<string | null>(null)
 const success = ref(false)
 const biometrics = ref<IBiometric[]>([])
 
-const form = ref({
+const form = ref<IBiometric>({
   'readingDateTime': new Date().toISOString().split("T")[0],
   'bodyMassKg': null,
   'bmi': null,
@@ -57,10 +58,16 @@ onMounted(async () => {
 
 const getEntries = async () => {
   loading.value = true
-
+  
   try {
-    const res = await db?.collection('biometrics').getList<IBiometric>(1, 200, { filter: 'user.id=\'' + db.authStore.model?.id + '\'', sort: '-readingDateTime' })
-    biometrics.value = res?.items ?? []
+
+    if (db?.authStore.isValid) {
+      const res = await db?.collection('biometrics').getList<IBiometric>(1, 200, { filter: 'user.id=\'' + db.authStore.model?.id + '\'', sort: '-readingDateTime' })
+      biometrics.value = res?.items ?? []
+    } else {
+      biometrics.value = (JSON.parse(localStorage.getItem('biometrics') ?? '[]') as Array<IBiometric>).sort((a, b) => +new Date(b.readingDateTime) - +new Date(a.readingDateTime))
+    }
+
   } catch (e) {
     let apiError = e as ClientResponseError
     console.error(apiError.message)
@@ -75,7 +82,16 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
-    await db?.collection('biometrics').create({ ...form.value, user: db.authStore.model?.id })
+    
+    if (db?.authStore.isValid) {
+      await db?.collection('biometrics').create({ ...form.value, user: db.authStore.model?.id })
+    } else {
+      let localStorageEntries = JSON.parse(localStorage.getItem('biometrics') ?? '[]') as Array<IBiometric>
+      localStorageEntries.push({ ...form.value, id: uuid() })
+
+      localStorage.setItem('biometrics', JSON.stringify(localStorageEntries))
+    }
+
   } catch (e) {
     let apiError = e as ClientResponseError
     console.error(apiError.message)
@@ -97,12 +113,20 @@ const handleSubmit = async () => {
   }, 200)
 }
 
-const deleteEntry = async (id: string) => {
-
+const deleteEntry = async (id: string | undefined) => {
+  
+  if (!id) throw new Error('Something went wrong...')
   loading.value = true
 
   try {
-    await db?.collection('biometrics').delete(id)
+    if (db?.authStore.isValid) {
+      await db?.collection('biometrics').delete(id)
+    } else {
+      let localStorageEntries = JSON.parse(localStorage.getItem('biometrics') ?? '[]') as Array<IBiometric>
+      localStorageEntries = localStorageEntries.filter(lse => lse.id !== id)
+
+      localStorage.setItem('biometrics', JSON.stringify(localStorageEntries))
+    }
   } catch (e) {
     let apiError = e as ClientResponseError
     console.error(apiError.message)
@@ -198,12 +222,12 @@ const shouldShowDate = (readingDateTime: string): boolean => {
       <tbody>
         <TableRow v-for="item in biometrics" as="div">
           <TableCell>{{ item.readingDateTime.split(" ")[0] }}</TableCell>
-          <TableCell>{{ item.bodyMassKg }}</TableCell>
-          <TableCell>{{ item.bmi }}</TableCell>
-          <TableCell>{{ item.bodyFatPercentage }}</TableCell>
-          <TableCell>{{ item.bodyMusclePercentage }}</TableCell>
-          <TableCell>{{ item.bodyWaterPercentage }}</TableCell>
-          <TableCell>{{ item.boneMassKg }}</TableCell>
+          <TableCell>{{ !item.bodyMassKg ? 'N/A' : item.bodyMassKg }}</TableCell>
+          <TableCell>{{ !item.bmi ? 'N/A' : item.bmi }}</TableCell>
+          <TableCell>{{ !item.bodyFatPercentage ? 'N/A' : item.bodyFatPercentage }}</TableCell>
+          <TableCell>{{ !item.bodyMusclePercentage ? 'N/A' : item.bodyMusclePercentage }}</TableCell>
+          <TableCell>{{ !item.bodyWaterPercentage ? 'N/A' : item.bodyWaterPercentage }}</TableCell>
+          <TableCell>{{ !item.boneMassKg ? 'N/A' : item.boneMassKg }}</TableCell>
           <TableCell>
             <button @click="deleteEntry(item.id)">
               <TrashIcon class="w-5 h-5 text-rose-400" />
