@@ -8,8 +8,10 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+env:
+  build_version: $(node -p "require('./package.json').version")
 
-run-name: Build and deploy $(node -p "require('./package.json').version")
+run-name: Build and deploy ${{ github.env.build_version }} 
 
 jobs:
   build_and_deploy_job:
