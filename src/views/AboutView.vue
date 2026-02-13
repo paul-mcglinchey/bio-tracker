@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import Blob from '@/components/Blob.vue';
 import AccordionSection from '@/components/AccordionSection.vue';
-
-
-
 </script>
 
 <template>

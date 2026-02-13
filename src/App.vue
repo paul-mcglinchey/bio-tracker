@@ -5,7 +5,6 @@ import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 import Splash from './components/Splash.vue'
 import Nav from './components/Nav.vue'
-
 </script>
 
 <template>

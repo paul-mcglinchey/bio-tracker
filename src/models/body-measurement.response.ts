@@ -1,5 +1,5 @@
-export interface IBiometric {
-  id?: string
+export interface BodyMeasurementResponse {
+  id: string
   readingDateTime: string
   bodyMassKg: number | null
   bmi: number | null

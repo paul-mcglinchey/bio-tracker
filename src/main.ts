@@ -3,18 +3,20 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/main.css'
-import { APISettings } from './api/config'
-import PocketBase from 'pocketbase'
-import { authServiceInjectionKey } from './injectionKeys/auth.service.key'
-import { AuthService } from './services/auth.service'
-import { dbInjectionKey } from './injectionKeys/db.key'
+import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
 const app = createApp(App)
 
 app.use(router)
 
-const pb = new PocketBase(APISettings.baseURL)
-app.provide(dbInjectionKey, pb)
-app.provide(authServiceInjectionKey, new AuthService(pb))
+const firebaseConfig = {};
+
+const firebaseApp = initializeApp(firebaseConfig)
+getFirestore(firebaseApp)
+getAnalytics(firebaseApp)
+getAuth(firebaseApp)
 
 app.mount('#app')

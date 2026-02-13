@@ -1,0 +1,9 @@
+export interface BodyMeasurementRequest {
+  readingDateTime: string
+  bodyMassKg: number | null
+  bmi: number | null
+  bodyFatPercentage: number | null
+  bodyMusclePercentage: number | null
+  bodyWaterPercentage: number | null
+  boneMassKg: number | null
+}

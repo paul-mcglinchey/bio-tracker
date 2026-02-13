@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid';
-import { inject } from 'vue';
+import { getAuth } from 'firebase/auth';
 
 defineProps<{
   label?: string
 }>()
 
-const authService = inject(authServiceInjectionKey)
+const auth = getAuth()
 
 </script>
 
@@ -26,7 +25,7 @@ const authService = inject(authServiceInjectionKey)
               active ? 'bg-indigo-500 text-white' : 'text-gray-900',
               'group flex w-full items-center px-2 py-2 text-sm',
             ]" 
-            @click="authService?.logout()"
+            @click="auth.signOut"
           >
             Logout
           </button>

@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
-import { dbInjectionKey } from '@/injectionKeys/db.key';
+import { ref } from 'vue';
 import { ArrowPathIcon, CheckIcon } from '@heroicons/vue/20/solid';
-import { v4 as uuid } from 'uuid'
-import type { IBiometric } from '@/models/biometrics.model';
 import type { ClientResponseError } from 'pocketbase';
 import NumericInput from './NumericInput.vue';
 import DateInput from './DateInput.vue';
+import { getFirestore, addDoc, collection } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import { BodyMeasurementRequest } from '@/models/body-measurement.request';
 
 const emit = defineEmits(['completedSubmitting'])
-const db = inject(dbInjectionKey)
+const auth = getAuth()
+const firestore = getFirestore()
 
-const form = ref<IBiometric>({
+const form = ref<BodyMeasurementRequest>({
   'readingDateTime': new Date().toISOString().split("T")[0],
   'bodyMassKg': null,
   'bmi': null,
@@ -25,22 +26,16 @@ const error = ref<string | null>(null)
 const success = ref(false)
 
 const handleSubmit = async () => {
+  if (!auth.currentUser) throw new Error('Current user is not defined')
 
   loading.value = true
 
   try {
-    if (db?.authStore.isValid) {
-      await db?.collection('biometrics').create({ ...form.value, user: db.authStore.model?.id })
-    } else {
-      let localStorageEntries = JSON.parse(localStorage.getItem('biometrics') ?? '[]') as Array<IBiometric>
-      
-      localStorageEntries.push({ ...form.value, id: uuid() })
-      localStorage.setItem('biometrics', JSON.stringify(localStorageEntries))
-    }
+    await addDoc(collection(firestore, 'users', auth.currentUser.uid, 'body-measurements'), form.value)
   } catch (e) {
+    console.error(e)
     let apiError = e as ClientResponseError
     
-    console.error(apiError.message)
     error.value = apiError.message
   } finally {
     emit('completedSubmitting')

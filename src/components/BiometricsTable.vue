@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { IBiometric } from '@/models/biometrics.model';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 import { TrashIcon } from '@heroicons/vue/20/solid';
 import { subDays } from 'date-fns';
@@ -8,9 +7,10 @@ import AccordionSection from './AccordionSection.vue';
 import TableCell from './TableCell.vue';
 import TableHeader from './TableHeader.vue';
 import TableRow from './TableRow.vue';
+import { BodyMeasurementResponse } from '@/models/body-measurement.response';
 
 defineProps<{
-  biometrics: IBiometric[]
+  biometrics: BodyMeasurementResponse[]
 }>()
 
 const emit = defineEmits(['deleteEntry'])

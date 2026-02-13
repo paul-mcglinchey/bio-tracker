@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { dbInjectionKey } from '@/injectionKeys/db.key';
-import { computed, inject, ref } from 'vue';
+import { computed, ref } from 'vue';
 import NavLink from '../components/NavLink.vue'
 import Menu from '../components/Menu.vue'
 import LoginModal from './LoginModal.vue'
 import MobileNavLink from './MobileNavLink.vue';
 import { XMarkIcon, Bars3Icon } from '@heroicons/vue/20/solid';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { authServiceInjectionKey } from '@/injectionKeys/auth.service.key';
+import { getAuth } from 'firebase/auth';
 
+const auth = getAuth()
 const loginOpen = ref<boolean>(false)
 const openLogin = (): void => { loginOpen.value = true }
 const closeLogin = (): void => { loginOpen.value = false }
 
-const db = ref(inject(dbInjectionKey))
-const authService = ref(inject(authServiceInjectionKey))
-const isValid = ref(db.value?.authStore.isValid)
+const isValid = ref(!!auth.currentUser)
 
-db?.value?.authStore.onChange(() => {
-  isValid.value = db.value?.authStore.isValid
+auth.onAuthStateChanged(user => {
+  isValid.value = !!user
 })
 
-const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
+const greeting = computed(() => 'Hello, ' + (auth.currentUser?.displayName ?? auth.currentUser?.email))
+
+const logout = async () => {
+  console.log('here')
+  await auth.signOut()
+}
 
 </script>
 
@@ -60,7 +63,7 @@ const greeting = computed(() => 'Hello, ' + db?.value?.authStore.model?.name)
           <MobileNavLink @click="close()" to="/about">About</MobileNavLink>
         </div>
       <div class="flex text-center mt-4 border-t border-neutral-500/50 pt-4 justify-center text-lg">
-        <DisclosureButton v-if="isValid" as="button" @click="authService?.logout()" class="lowercase">Logout</DisclosureButton>
+        <DisclosureButton v-if="isValid" as="button" @click="logout" class="lowercase">Logout</DisclosureButton>
         <DisclosureButton v-else as="button" @click="openLogin" class="lowercase">Login</DisclosureButton>
       </div>
       </DisclosurePanel>
